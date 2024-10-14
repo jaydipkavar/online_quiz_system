@@ -1,0 +1,12 @@
+{% extends 'student/studentbase.html' %}
+{% block content %}
+
+<div class="container my-4">
+  <h1>Quiz Completed!</h1>
+  <h4>Thank you for participating in the {{ course.course_name }} quiz.</h4>
+  <h4>Your Score: {{ attempted_marks }} out of {{ total_marks }}</h4>
+  <a href="{% url 'start-exam' course.id %}" class="btn btn-primary">Take Quiz Again</a>
+</div>
+</div>
+
+{% endblock content %}

@@ -1,0 +1,64 @@
+{% extends 'student/studentbase.html' %}
+{% block content %}
+{%load static%}
+<head>
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+  </head>
+  
+  <div class="container my-4">
+    <h1>{{course.course_name}}</h1>
+    <!-- <h4>Total Questions: {{course.question_number}}</h4> -->
+    <!-- <h4>Question {{current_question_index|add:1}} of {{course.question_number}}</h4> -->
+    
+    <div class="jumbotron">
+      <h3 class="text-info">{{current_question.question}}</h3>
+      <h4 style="text-align: right;">[Marks {{current_question.marks}}]</h4>
+  
+      <form action="{% url 'start-exam' course.id %}" method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="current_question_index" value="{{ current_question_index }}">
+        <div class="hint-toggle" onclick="toggleHint(this)">
+            <span class="text-info" style="cursor: pointer;">Show Hint</span>
+        </div>
+        <div class="hint text-muted" style="display: none;">
+            {{ current_question_hint }}
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="answer" value="Option1" id="option1">
+          <label class="form-check-label" for="option1">{{ current_question.option1 }}</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="answer" value="Option2" id="option2">
+          <label class="form-check-label" for="option2">{{ current_question.option2 }}</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="answer" value="Option3" id="option3">
+          <label class="form-check-label" for="option3">{{ current_question.option3 }}</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="answer" value="Option4" id="option4">
+          <label class="form-check-label" for="option4">{{ current_question.option4 }}</label>
+        </div>
+        
+        <input class="btn btn-info" type="submit" value="Submit">
+      </form>
+  
+      <div id="feedback" style="margin-top: 20px;">{{ feedback_message|safe }}</div>
+    </div>
+  </div>
+</div>
+
+  <script>
+    function toggleHint(element) {
+        const hint = element.nextElementSibling; // Get the hint div that follows the clicked element
+        if (hint) {
+            // Toggle the display of the hint
+            hint.style.display = (hint.style.display === 'none' || hint.style.display === '') ? 'block' : 'none';
+            
+            // Update the text of the hint toggle
+            element.querySelector('span').textContent = (hint.style.display === 'block') ? 'Hide Hint' : 'Show Hint';
+        }
+    }
+    </script>
+{% endblock content %}

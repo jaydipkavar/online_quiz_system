@@ -1,0 +1,16 @@
+//set env
+python -m venv venv
+cd venv/Script
+activate
+
+// install dependancy
+pip install -r requirements.txt
+python manage.py runserver
+python manage.py create_quiz
+
+//create new admin
+python manage.py createsuperuser
+
+//admin password
+superadmin@yopmail.com
+admin

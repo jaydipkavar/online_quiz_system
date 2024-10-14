@@ -1,0 +1,68 @@
+{% extends 'student/studentbase.html' %}
+{% load static %}
+
+<head>
+  <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+  <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+  <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+</head>
+
+<div class="jumbotron my-4">
+  <h1 style="text-align: center;">{{ course.course_name }}</h1>
+
+  <div class="text-right">
+    <h4>Total Questions: {{ questions|length }}</h4>
+    <h4>Questions Attended: <span id="attended-count">0</span></h4>
+  </div>
+
+  <form class="form" autocomplete="off" onsubmit="return saveAns()" action="/student/calculate-marks" method="POST">
+    {% csrf_token %}
+    
+    {% if current_question %}
+      <h3 class="text-info">{{ forloop.counter }}. {{ current_question.question }}</h3>
+      <h4 style="text-align: right;">[Marks {{ current_question.marks }}]</h4>
+
+      <input type="hidden" name="current_question_index" value="{{ current_question_index }}">
+      
+      <div class="form-check mx-4">
+        <input class="form-check-input" type="radio" name="answer" id="option1" value="Option1">
+        <label class="form-check-label" for="option1">{{ current_question.option1 }}</label>
+      </div>
+      <div class="form-check mx-4">
+        <input class="form-check-input" type="radio" name="answer" id="option2" value="Option2">
+        <label class="form-check-label" for="option2">{{ current_question.option2 }}</label>
+      </div>
+      <div class="form-check mx-4">
+        <input class="form-check-input" type="radio" name="answer" id="option3" value="Option3">
+        <label class="form-check-label" for="option3">{{ current_question.option3 }}</label>
+      </div>
+      <div class="form-check mx-4">
+        <input class="form-check-input" type="radio" name="answer" id="option4" value="Option4">
+        <label class="form-check-label" for="option4">{{ current_question.option4 }}</label>
+      </div>
+
+      <input class="btn btn-info btn-lg" type="submit" value="Submit">
+    {% else %}
+      <h3>No more questions!</h3>
+    {% endif %}
+    
+    <div id="feedback" style="margin-top: 20px;">{{ feedback_message }}</div>
+  </form>
+</div>
+
+<script>
+  let attendedQuestions = 0;
+
+  function saveAns() {
+    const ele = document.querySelector('input[name="answer"]:checked');
+    if (ele) {
+      attendedQuestions++;
+      document.getElementById('attended-count').innerText = attendedQuestions;
+    }
+
+    return true; // Allow form submission
+  }
+</script>
+
+<br><br><br><br><br><br>
+{% endblock content %}
